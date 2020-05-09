@@ -35,14 +35,11 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     //Timer
-    let deadline = '2020-05-08';
+    let deadline = '2020-05-10';
 
     function getTimeRemaining(endtime) {
-        let t = Date.parse(endtime) - Date.parse(new Date());
-        
-        if (t < 0) {t = 0;}
-        
-        let seconds = Math.floor((t/1000) % 60),
+        let t = Date.parse(endtime) - Date.parse(new Date()),
+            seconds = Math.floor((t/1000) % 60),
             minutes = Math.floor((t/1000/60) % 60),
             hours = Math.floor(t/1000/60/60);
 
@@ -58,7 +55,7 @@ window.addEventListener('DOMContentLoaded', function() {
         let timer = document.getElementById(id),
             hours = timer.querySelector('.hours'),
             minutes = timer.querySelector('.minutes'),
-            second = timer.querySelector('.seconds'),
+            seconds = timer.querySelector('.seconds'),
             timeInterval = setInterval(updateClock,1000);
 
         function updateClock() {
@@ -66,14 +63,46 @@ window.addEventListener('DOMContentLoaded', function() {
             
             hours.textContent = (t.hours<10) ? '0'+t.hours : t.hours;
             minutes.textContent = (t.minutes<10) ? '0'+t.minutes : t.minutes;
-            second.textContent = (t.seconds<10) ? '0'+t.seconds : t.seconds;
+            seconds.textContent = (t.seconds<10) ? '0'+t.seconds : t.seconds;
 
             if (t.total <=0) {
                 clearInterval(timeInterval);
+                hours.textContent = '00';
+                minutes.textContent = '00';
+                seconds.textContent = '00';
             }
 
         }    
     }
 
     setClock('timer', deadline);
+
+    //Modal
+
+    let more = document.querySelector('.more'),  
+        overlay = document.querySelector(".overlay"),
+        close = document.querySelector(".popup-close");
+
+    more.addEventListener('click', function() {
+        overlay.style.display = 'block';
+        this.classList.add('more-splash');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    close.addEventListener('click', function(){
+        overlay.style.display = 'none';
+        more.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    });
+
+    //Modal window to tab button
+
+    let tabButtons = document.querySelectorAll('.description-btn');
+    tabButtons.forEach(function (item) {
+        item.addEventListener('click', function () {
+            overlay.style.display = 'block';
+            this.classList.add('more-splash');
+            document.body.style.overflow = 'hidden';
+        });
+    });
 });
